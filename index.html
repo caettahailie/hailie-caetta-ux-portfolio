@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hailie Caetta · UX Research & Design</title>
+    <link rel="stylesheet" href="case.css">
+
+    <!-- Minimalist system font stack (no external calls needed) -->
+    <style>
+        :root {
+            --bg: #f8f8f8;
+            --bg-alt: #ffffff;
+            --text: #111111;
+            --muted: #666666;
+            --accent: #982C10;
+            /* keep it minimal; can switch to a color later */
+            --border: #e0e0e0;
+            --radius-s: 6px;
+            --radius-m: 10px;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --max-width: 1100px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Layout helpers */
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            padding: 4rem 0;
+        }
+
+        @media (min-width: 768px) {
+            section {
+                padding: 5rem 0;
+            }
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-intro {
+            max-width: 550px;
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+        }
+
+        /* NAVBAR */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(248, 248, 248, 0.97);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(224, 224, 224, 0.6);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 0;
+        }
+
+        .nav-logo {
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a {
+            position: relative;
+            padding-bottom: 0.1rem;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent);
+            transition: width 0.2s ease-out;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a:focus-visible::after {
+            width: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+                padding: 0.7rem 0;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 0.8rem 1.2rem;
+            }
+        }
+
+        /* HERO */
+
+        .hero {
+            padding-top: 3rem;
+            padding-bottom: 4rem;
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-kicker {
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.1rem, 3vw + 1rem, 3rem);
+            line-height: 1.1;
+            margin-bottom: 1.1rem;
+            font-weight: 650;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        /* "What I do:" label */
+        .hero-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        /* Typed text line */
+        #typed-text {
+            min-height: 1.4em;
+            /* keeps layout stable as phrases change length */
+            font-weight: 650;
+        }
+
+        /* Blinking cursor */
+        .cursor {
+            display: inline-block;
+            margin-left: 3px;
+            color: var(--accent);
+            font-weight: 600;
+            animation: blink 0.9s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+
+
+
+        .hero-subtitle {
+            color: var(--muted);
+            max-width: 520px;
+            margin-bottom: 1.8rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.4rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.4rem;
+            font-size: 0.95rem;
+            border-radius: 999px;
+            border: 1px solid var(--accent);
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out,
+                background-color 0.12s ease-out, color 0.12s ease-out;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #ffffff;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--accent);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .hero-meta {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+        }
+
+        .hero-visual {
+            background-color: var(--bg-alt);
+            border-radius: var(--radius-m);
+            border: 1px solid var(--border);
+            padding: 1.3rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .hero-visual-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .hero-visual-box {
+            border-radius: var(--radius-s);
+            border: 1px dashed var(--border);
+            padding: 1.2rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .hero-visual-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 1rem;
+        }
+
+        .pill {
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.7rem;
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 800px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 2.5rem;
+            }
+        }
+
+        /* FEATURED WORK */
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(1fr));
+            gap: 1.8rem;
+        }
+
+        @media (max-width: 800px) {
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .case-card {
+            background-color: var(--bg-alt);
+            border-radius: var(--radius-m);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+        }
+
+        .case-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.07);
+        }
+
+        .case-meta {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .case-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .case-desc {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .case-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-bottom: 1rem;
+        }
+
+        .case-tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .case-link {
+            margin-top: auto;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .case-link span {
+            font-size: 1rem;
+        }
+
+        .work-cta {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            justify-content: center;
+        }
+
+        .work-cta a {
+            border-bottom: 1px solid transparent;
+        }
+
+        .work-cta a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        /* PROCESS SECTION */
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .process-card {
+            background-color: var(--bg-alt);
+            border-radius: var(--radius-m);
+            border: 1px solid var(--border);
+            padding: 1.4rem 1.3rem;
+        }
+
+        .process-step {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .process-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .process-list {
+            margin: 0.4rem 0 0;
+            padding-left: 1.1rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .process-list li+li {
+            margin-top: 0.2rem;
+        }
+
+        /* ABOUT */
+
+        .about-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0,1fr);
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (max-width: 800px) {
+            .about-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .about-text {
+            font-size: 0.95rem;
+            color: var(--muted);
+        }
+
+        .about-text p+p {
+            margin-top: 0.7rem;
+        }
+
+        .about-link {
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .about-card {
+            background-color: var(--bg-alt);
+            border-radius: var(--radius-m);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: left;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .about-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--muted);
+            margin-bottom: 0.7rem;
+        }
+
+        .about-pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .about-pill {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+        }
+        
+
+        /* CONTACT */
+
+        .contact {
+            text-align: center;
+        }
+
+        .contact p {
+            color: var(--muted);
+            margin-bottom: 1.4rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-email {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-email a {
+            border-bottom: 1px solid transparent;
+        }
+
+        .contact-email a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .contact-links {
+            margin-top: 0.6rem;
+            font-size: 0.9rem;
+        }
+
+        .contact-links a+a {
+            margin-left: 1rem;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 2rem 0 2.5rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            font-size: 0.8rem;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .footer-inner {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <!-- NAVBAR -->
+        <header>
+            <div class="container">
+                <nav class="nav">
+                    <div class="nav-logo">Hailie Caetta</div>
+                    <div class="nav-links">
+                        <a href="#work">Work</a>
+                        <a href="#process">Process</a>
+                        <a href="#about">About</a>
+                        <a href="#contact">Contact</a>
+                        <a href="images/hailie-caetta-ux-resume.pdf" target="_blank" rel="noopener">Resume</a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <main>
+            <!-- HERO -->
+            <section class="hero" id="top">
+                <div class="container">
+                    <div class="hero-inner">
+                        <div>
+                            <div class="hero-kicker">UX Research · UX Design</div>
+                            <h1 class="hero-title">
+                                <span class="hero-label">What I do:</span>
+                                <span>
+                                    <span id="typed-text"></span>
+                                    <span class="cursor">|</span>
+                                </span>
+                            </h1>
+
+
+                            <p class="hero-subtitle">
+                                UX researcher & designer with a Human Systems Engineering background.
+                                I bridge psychology, usability, and visual design to create clear,
+                                grounded experiences.
+                            </p>
+                            <div class="hero-cta">
+                                <a href="#work" class="btn btn-primary">View my work</a>
+                                <a href="images/hailie-caetta-ux-resume.pdf"
+                                class="btn btn-secondary"
+                                target="_blank"
+                                rel="noopener"
+                              >
+                                View résumé (PDF)
+                              </a>
+                              
+                            </div>
+                            <div class="hero-meta">
+                                Case studies across travel UX, media, and quick-service hospitality.
+                            </div>
+                        </div>
+
+                        <aside class="hero-visual" aria-label="Snapshot of featured projects">
+                            <div class="hero-visual-label">Featured focus areas</div>
+                            <div class="hero-visual-box">
+                                Mixed-method UX research, heuristic evaluations, and
+                                interface design for complex, real-world problems.
+                                <div class="hero-visual-pills">
+                                    <span class="pill">Heuristic evaluation</span>
+                                    <span class="pill">Cognitive walkthroughs</span>
+                                    <span class="pill">Design systems</span>
+                                    <span class="pill">Behavior change</span>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FEATURED WORK -->
+            <section id="work">
+                <div class="container">
+                    <h2 class="section-title">Featured work</h2>
+                    <p class="section-intro">
+                        A hybrid mix of UX research, interface design, and system-level thinking.
+                        Each project shows how I move from evidence to design decisions.
+                    </p>
+
+                    <div class="work-grid">
+                        <!-- Card 1 -->
+                        <article class="case-card">
+                            <div>
+                                <div class="case-meta">AI Trust · Research & Design</div>
+                                <h3 class="case-title">Calibrating trust in AI for critical thinking</h3>
+                                <p class="case-desc">
+                                    Designing and validating the TRUST-CT scale to understand why people trust AI text
+                                    and how interface cues can encourage healthy skepticism and verification.
+                                </p>
+                                <div class="case-tags">
+                                    <span class="case-tag">Human-AI interaction</span>
+                                    <span class="case-tag">Trust & overreliance</span>
+                                    <span class="case-tag">Experimental design</span>
+                                </div>
+                            </div>
+                            <a href="card1.html" class="case-link">
+                                View case study <span>↗</span>
+                            </a>
+                        </article>
+
+                        <!-- Card 2 -->
+                        <!-- Card: eDreams Cancellation Support Redesign -->
+                        <article class="case-card">
+                            <div>
+                                <div class="case-meta">Travel UX · Research & Design</div>
+                                <h3 class="case-title">Redesigning cancellation support to reduce friction</h3>
+                                <p class="case-desc">
+                                    A usability-test-informed redesign of eDreams’ cancellation support flow to improve
+                                    findability of policies and contact options—without forcing users to log in.
+                                </p>
+                                <div class="case-tags">
+                                    <span class="case-tag">Usability testing</span>
+                                    <span class="case-tag">IA & task flow</span>
+                                    <span class="case-tag">Support UX</span>
+                                </div>
+                            </div>
+                            <a href="card2.html" class="case-link">
+                                View case study <span>↗</span>
+                            </a>
+                        </article>
+
+                    <div class="work-cta">
+                        <span>More projects coming soon · </span>
+                        <a href="#contact">Get in touch</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROCESS -->
+            <section id="process">
+                <div class="container">
+                    <h2 class="section-title">How I work</h2>
+                    <p class="section-intro">
+                        I combine structured research with iterative design. My process
+                        is flexible enough for coursework, experiments, and real-world teams.
+                    </p>
+
+                    <div class="process-grid">
+                        <article class="process-card">
+                            <div class="process-step">01 · Discover</div>
+                            <h3 class="process-title">Research & framing</h3>
+                            <ul class="process-list">
+                                <li>Clarify goals and constraints</li>
+                                <li>Heuristic evaluations & walkthroughs</li>
+                                <li>Journey mapping & personas</li>
+                                <li>Literature review & frameworks</li>
+                            </ul>
+                        </article>
+
+                        <article class="process-card">
+                            <div class="process-step">02 · Design</div>
+                            <h3 class="process-title">Explore & prototype</h3>
+                            <ul class="process-list">
+                                <li>Sketches, wireframes, and flows</li>
+                                <li>Component-driven UIs</li>
+                                <li>Interaction patterns & microcopy</li>
+                                <li>Accessible visual systems</li>
+                            </ul>
+                        </article>
+
+                        <article class="process-card">
+                            <div class="process-step">03 · Iterate</div>
+                            <h3 class="process-title">Test & refine</h3>
+                            <ul class="process-list">
+                                <li>Connect findings to design decisions</li>
+                                <li>Prioritize trade-offs and constraints</li>
+                                <li>Reflect on impact & next steps</li>
+                                <li>Document learnings for teams</li>
+                            </ul>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABOUT -->
+            <section id="about">
+                <div class="container">
+                    <h2 class="section-title">About me</h2>
+                    <div class="about-layout">
+                        <div class="about-text">
+                            <p>
+                                I’m a UX researcher and designer studying Human Systems Engineering with a UX
+                                concentration. I’m really interested in how people make decisions—especially
+                                when systems are confusing, stressful, or trying to be “helpful” but miss the
+                                mark.
+                              </p>
+                              
+                              <p>
+                                I like digging into the why behind user behavior. Why do people trust certain
+                                systems? When do they stop questioning information? Where does frustration
+                                actually start? Those questions usually guide my work more than jumping
+                                straight to solutions.
+                              </p>
+
+                              <p>
+                                I’m motivated by work that makes technology feel less intimidating and more
+                                supportive—especially in moments when users need clarity, reassurance, or
+                                control.
+                              </p>                              
+                              
+                              <p>
+                                My projects span travel platforms, media apps, AI tools, and service
+                                experiences. Whether I’m running usability tests, mapping task flows, or
+                                designing interfaces, my goal is always the same: make things clearer, more
+                                honest, and easier to navigate in real moments.
+                              </p>
+
+                              <p>
+                                Outside of UX, I’m usually cooking, watching long-form YouTube videos, or
+                                planning my next trip. I’m drawn to things that tell a story or help me
+                                understand how people think, whether that’s through food, media, or travel.
+                              </p>
+                              
+                              
+                        </div>
+
+                        <aside class="about-card" aria-label="Snapshot of skills">
+                            <div class="about-label">Selected skills</div>
+                            <div class="about-pill-list">
+                                <span class="about-pill">UX research</span>
+                                <span class="about-pill">Heuristic evaluation</span>
+                                <span class="about-pill">Journey mapping</span>
+                                <span class="about-pill">Wireframing & UI</span>
+                                <span class="about-pill">Design systems</span>
+                                <span class="about-pill">Behavioral science</span>
+                                <span class="about-pill">Customer Service</span>
+                            </div>
+                        </aside>
+<aside class="about-card" aria-label="Tools and technical skills">
+  <div class="about-label">Tools & methods</div>
+  <div class="about-pill-list">
+    <span class="about-pill">Figma</span>
+    <span class="about-pill">FigJam</span>
+    <span class="about-pill">HTML</span>
+    <span class="about-pill">CSS</span>
+    <span class="about-pill">JavaScript (basic)</span>
+    <span class="about-pill">R (data analysis)</span>
+    <span class="about-pill">Survey design</span>
+    <span class="about-pill">A/B testing</span>
+    <span class="about-pill">Usability metrics</span>
+    <span class="about-pill">Statistical analysis</span>
+  </div>
+</aside>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="contact">
+                <div class="container">
+                    <h2 class="section-title">Let’s collaborate</h2>
+                    <p>
+                        I’m open to internships, junior UX roles, and research-focused projects in
+                        tech, media, or healthcare. Reach out and let’s talk.
+                    </p>
+                    <div class="contact-email">
+                        <a href="mailto:caettahailie@gmail.com">
+                            caettahailie@gmail.com
+                        </a>
+                    </div>
+                    <div class="contact-links">
+                        <a href="https://www.linkedin.com/in/hailie-caetta-020667397" target="_blank" rel="noopener">LinkedIn</a>
+                        <a href="https://github.com/caettahailie" target="_blank" rel="noopener">GitHub / Portfolio files</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="container">
+                <div class="footer-inner">
+                    <div>© 2025 Hailie Caetta · UX Research & Design</div>
+                    <div>Built with HTML & CSS</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        const phrases = [
+            "UX research & usability evaluation",
+            "Human–AI interaction & trust",
+            "Information architecture & flows",
+            "Heuristic evaluations & cognitive walkthroughs",
+            "Mixed-methods study design",
+            "Behavioral science & reactance theory",
+            "Wireframing & interface design",
+            "Journey mapping & service design",
+            "Design systems & component libraries",
+            "Experimentation & data-driven insights"
+        ];
+
+        const typedText = document.getElementById("typed-text");
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let deleting = false;
+
+        function typeLoop() {
+            const currentPhrase = phrases[phraseIndex];
+
+            if (!deleting) {
+                // typing forward
+                typedText.textContent = currentPhrase.slice(0, ++charIndex);
+                if (charIndex === currentPhrase.length) {
+                    // finished a phrase, pause before deleting
+                    deleting = true;
+                    setTimeout(typeLoop, 1800);
+                    return;
+                }
+            } else {
+                // deleting text
+                typedText.textContent = currentPhrase.slice(0, --charIndex);
+                if (charIndex === 0) {
+                    // finished deleting, move to next phrase
+                    deleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    setTimeout(typeLoop, 500);
+                    return;
+                }
+            }
+
+            // typing and deleting speeds
+            const delay = deleting ? 45 : 80;
+            setTimeout(typeLoop, delay);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(typeLoop, 400); // small initial delay
+        });
+    </script>
+
+</body>
+
+</html>
